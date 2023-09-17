@@ -1,6 +1,6 @@
 'use client'
 import { FC, useState } from 'react'
-import { signIn } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 
 import { cn } from '@/lib/utils'
 
@@ -10,24 +10,28 @@ import { Icons } from '@/components/Icons'
 import { Button } from '@/components/ui/button'
 
 
-interface UserAuthFormProps  {
-  className?: string;
-}
+interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement>{}
 
 const UserAuthForm: FC<UserAuthFormProps> = ({
-  className
+  className, 
+  ...props
 }) => {
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
+
   const { toast } = useToast()
 
   const loginWithGoogle = async () => {
     setIsLoading(true)
 
     try {
-      await signIn('google')
+      await signIn('google', {
+        callbackUrl: "/"
+      })
+      .then((callback) => {
+        console.log(callback)
+      })
     } catch (error) {
-      // toast notification
       toast({ 
         title: 'There was a problem',
         description: "There was a problem with google login",
@@ -39,10 +43,13 @@ const UserAuthForm: FC<UserAuthFormProps> = ({
   }
 
   return (
-    <div className={cn(
-      "flex justify-center",
-      className
-    )}>
+    <div 
+      className={cn(
+        "flex justify-center",
+        className
+      )}
+      {...props}
+    >
       <Button 
         onClick={loginWithGoogle} 
         disabled={isLoading} 
