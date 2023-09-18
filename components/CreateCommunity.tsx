@@ -85,8 +85,8 @@ const CreateCommunity = () => {
     }
   })
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    createCommunity(values)
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    await createCommunity(values)
   }
 
   return (
