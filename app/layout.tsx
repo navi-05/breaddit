@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import Navbar from "@/components/Navbar";
 import { Toaster } from "@/components/ui/toaster";
 import QueryProvider from "@/components/providers/QueryProvider";
+import AuthSessionProvider from "@/components/providers/AuthSessionProvider";
 
 export const metadata = {
   title: "Breaddit",
@@ -31,10 +32,12 @@ export default function RootLayout({
     >
       <body className="min-h-screen pt-12 bg-slate-50 antialiased">
         <QueryProvider>
-          <Navbar />
-          {authModal}
-          <div className="container max-w-7xl  h-full pt-12">{children}</div>
-          <Toaster />
+          <AuthSessionProvider>
+            <Navbar />
+            {authModal}
+            <div className="container max-w-7xl  h-full pt-12">{children}</div>
+            <Toaster />
+          </AuthSessionProvider>
         </QueryProvider>
       </body>
     </html>

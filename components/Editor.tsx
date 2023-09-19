@@ -14,6 +14,9 @@ import { FC, useCallback, useEffect, useRef, useState } from 'react'
 import { toast } from '@/hooks/use-toast'
 import { uploadFiles } from '@/lib/uploadthing'
 
+import { Button } from '@/components/ui/button'
+import { ButtonLoading } from './ui/button-loading'
+
 
 interface EditorProps {
   subreddit: Subreddit
@@ -148,7 +151,8 @@ const Editor: FC<EditorProps> = ({ subreddit }) => {
   }, [isMounted, initializeEditor])
 
   const { 
-    mutate: createPost
+    mutate: createPost,
+    isLoading
   } = useMutation({
     mutationFn: async (payload: z.infer<typeof formSchema>) => {
       const { data } = await axios.post(`/api/subreddit/post/create`, payload)
@@ -181,34 +185,48 @@ const Editor: FC<EditorProps> = ({ subreddit }) => {
       subredditId: subreddit.id
     }
 
-    createPost(payload)
-
+    createPost(payload) 
   }
 
   const { ref: titleRef, ...rest } = register('title')
 
   return (
-    <div className='w-full p-4 bg-zinc-50 rounded-lg border border-zinc-200'>
-      <form 
-        id="subreddit-post-form"
-        onSubmit={handleSubmit(onSubmit)}
-        className='w-fit'
-      >
-        <div className='prose prose-stone dark:prose-invert'>
-          <TextareaAutosize 
-            ref={(e) => {
-              titleRef(e)
-              // @ts-ignore
-              _titleRef.current = e
-            }}
-            {...rest}
-            placeholder='Title' 
-            className='w-full resize-none appearance-none overflow-hidden bg-transparent text-5xl font-bold focus:outline-none'
-          />
-          <div id='editor' className='min-h-[500px]' />
-        </div>
-      </form>
-    </div>
+    <>
+      <div className='w-full p-4 bg-zinc-50 rounded-lg border border-zinc-200'>
+        <form 
+          id="subreddit-post-form"
+          onSubmit={handleSubmit(onSubmit)}
+          className='w-fit'
+        >
+          <div className='prose prose-stone dark:prose-invert'>
+            <TextareaAutosize 
+              ref={(e) => {
+                titleRef(e)
+                // @ts-ignore
+                _titleRef.current = e
+              }}
+              {...rest}
+              placeholder='Title' 
+              className='w-full resize-none appearance-none overflow-hidden bg-transparent text-5xl font-bold focus:outline-none'
+              />
+            <div id='editor' className='min-h-[500px]' />
+          </div>
+        </form>
+      </div>
+      <div className="w-full flex justify-end">
+        {isLoading ? (
+          <ButtonLoading isFull />
+          ) : (
+          <Button 
+            type="submit"
+            className="w-full"
+            form="subreddit-post-form"
+          >
+            Post
+          </Button>
+        )}
+      </div>
+    </>
 )}
 
 export default Editor
