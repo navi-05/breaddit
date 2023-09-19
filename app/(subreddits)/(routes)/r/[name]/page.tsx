@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation"
 
-import Sidebar from "@/components/Sidebar"
+import PostFeed from "@/components/PostFeed"
 import MiniCreatePost from "@/components/MiniCreatePost"
 
 import { db } from "@/lib/db"
@@ -43,7 +43,10 @@ const page = async ({ params }: pageProps) => {
       </h1>
 
       <MiniCreatePost session={session!} />
-      {/* TODO: Show posts */}  
+      <PostFeed 
+        initialPosts={subreddit.posts}
+        subredditName={subreddit.name}
+      />
     </>
   )
 }

@@ -61,12 +61,14 @@ const Sidebar = async ({ subreddit, session }: SidebarProps) => {
         ) : (
           <SubscribeLeaveToggle subreddit={subreddit} isSubscribed={isSubscribed} />
         )}
-        <Link 
-          href={`${subreddit.name}/submit`}
-          className={buttonVariants({ variant: "outline", className: 'w-full mb-6' })}
-        >
-          Create Post
-        </Link>
+        {session?.user && (
+          <Link 
+            href={`${subreddit.name}/submit`}
+            className={buttonVariants({ variant: "outline", className: 'w-full mb-6' })}
+          >
+            Create Post
+          </Link>
+        )}
       </dl>
     </div>
   );
