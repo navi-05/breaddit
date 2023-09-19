@@ -1,8 +1,10 @@
+import Link from "next/link";
 import { format } from "date-fns";
 import { Session } from "next-auth";
 import { Subreddit } from "@prisma/client";
 
 import SubscribeLeaveToggle from "@/components/SubscribeLeaveToggle";
+import { buttonVariants } from "@/components/ui/button";
 
 import { db } from "@/lib/db";
 
@@ -59,6 +61,12 @@ const Sidebar = async ({ subreddit, session }: SidebarProps) => {
         ) : (
           <SubscribeLeaveToggle subreddit={subreddit} isSubscribed={isSubscribed} />
         )}
+        <Link 
+          href={`${subreddit.name}/submit`}
+          className={buttonVariants({ variant: "outline", className: 'w-full mb-6' })}
+        >
+          Create Post
+        </Link>
       </dl>
     </div>
   );

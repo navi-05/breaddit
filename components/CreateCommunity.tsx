@@ -85,8 +85,8 @@ const CreateCommunity = () => {
     }
   })
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    await createCommunity(values)
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
+    createCommunity(values)
   }
 
   return (
@@ -98,7 +98,12 @@ const CreateCommunity = () => {
       <hr className="bg-zinc-500 h-px" />
       <div className="relative">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
+          <form 
+            onSubmit={form.handleSubmit(onSubmit)} 
+            // Enter key redirecting to '/' for no reason
+            onKeyDown={(e) => {if(e.key === 'Enter') e.preventDefault()}}
+            className='space-y-8'
+          >
             <FormField
               control={form.control}
               name='name'
@@ -106,7 +111,7 @@ const CreateCommunity = () => {
                 <FormItem>
                   <FormLabel className='text-lg font-medium'>Name</FormLabel>
                   <FormDescription className='text-xs pb-2'>
-                  Community names including capitalization cannot be changed.
+                    Community names including capitalization cannot be changed.
                   </FormDescription>
                   <FormControl className='relative'>
                     <div>
