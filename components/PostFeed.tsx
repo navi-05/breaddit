@@ -1,7 +1,7 @@
 "use client";
 
 import axios from "axios";
-import { FC, useRef } from "react";
+import { FC, useEffect, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { useIntersection } from "@mantine/hooks";
 import { useInfiniteQuery } from "@tanstack/react-query";
@@ -10,6 +10,7 @@ import { ExtendedPost } from "@/types/db";
 import { INFINITE_SCROLLING_PAGINATION_RESULTS } from "@/config";
 
 import Post from "@/components/Post";
+import { Loader2 } from "lucide-react";
 
 interface PostFeedProps {
   initialPosts: ExtendedPost[];
@@ -44,6 +45,12 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, subredditName }) => {
       initialData: { pages: [initialPosts], pageParams: [1] },
     }
   );
+
+  useEffect(() => {
+    if(entry?.isIntersecting) {
+      fetchNextPage()
+    }
+  }, [entry, fetchNextPage])
 
   const posts = data?.pages.flatMap((page) => page) ?? initialPosts;
 
@@ -84,6 +91,11 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, subredditName }) => {
           );
         }
       })}
+      {isFetchingNextPage && (
+        <div className="mx-auto">
+          <Loader2 className="animate-spin w-6 h-6 text-zinc-700" />
+        </div>
+      )}
     </ul>
   );
 };
