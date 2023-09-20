@@ -1,25 +1,36 @@
-'use client'
+"use client";
 import { FC, useRef } from "react";
 import { MessageSquare } from "lucide-react";
 
-import { ExtendedPost } from "@/types/db";
 import { formatTimeToNow } from "@/lib/utils";
+import { ExtendedPost, PartialVote } from "@/types/db";
 
 import EditorOutput from "@/components/EditorOutput";
+import PostVoteClient from "@/components/post-vote/PostVoteClient";
 
 interface PostProps {
   post: ExtendedPost;
   commentsAmount: number;
+  votesAmt: number;
+  currentVote?: PartialVote;
 }
 
-const Post: FC<PostProps> = ({ post, commentsAmount }) => {
-
-  const pRef = useRef<HTMLDivElement>(null)
+const Post: FC<PostProps> = ({
+  post,
+  commentsAmount,
+  votesAmt,
+  currentVote,
+}) => {
+  const pRef = useRef<HTMLDivElement>(null);
 
   return (
     <div className="rounded-md bg-white shadow">
       <div className="px-6 py-4 flex justify-between">
-        {/* TODO: PostVotes */}
+        <PostVoteClient
+          postId={post.id}
+          initialVote={currentVote?.type}
+          initialVotesAmt={votesAmt}
+        />
 
         <div className="w-0 flex-1">
           <div className="max-h-40 mt-1 text-xs text-gray-500">
@@ -45,19 +56,25 @@ const Post: FC<PostProps> = ({ post, commentsAmount }) => {
               {post.title}
             </h1>
           </a>
-          <div className="relative text-sm max-h-40 w-full overflow-clip" ref={pRef}>
+          <div
+            className="relative text-sm max-h-40 w-full overflow-clip"
+            ref={pRef}
+          >
             <EditorOutput content={post.content} />
-              {pRef.current?.clientHeight === 160 && (
-                <div className="absolute bottom-0 left-0 h-20 w-full bg-gradient-to-t from-white to-transparent" />
-              )}
+            {pRef.current?.clientHeight === 160 && (
+              <div className="absolute bottom-0 left-0 h-20 w-full bg-gradient-to-t from-white to-transparent" />
+            )}
           </div>
         </div>
       </div>
       <div className="bg-gray-50 z-20 text-sm p-4 sm:px-6">
-        <a className="w-fit flex items-center gap-2" href={`/r/${post.subreddit.name}/post/${post.id}`}>
+        <a
+          className="w-fit flex items-center gap-2"
+          href={`/r/${post.subreddit.name}/post/${post.id}`}
+        >
           <MessageSquare className="h-4 w-4" /> {commentsAmount}
-        </a>     
-       </div>
+        </a>
+      </div>
     </div>
   );
 };

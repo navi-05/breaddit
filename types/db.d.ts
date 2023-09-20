@@ -6,3 +6,5 @@ export type ExtendedPost = Post & {
   author: User,
   comments: Comment[]
 }
+
+export type PartialVote = Pick<Vote, "type">
