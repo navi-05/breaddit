@@ -1,6 +1,7 @@
 import Link from "next/link"
 
 import { Icons } from "@/components/Icons"
+import SearchBar from "@/components/SearchBar"
 import { buttonVariants } from "@/components/ui/button"
 import UserAccountNav from "@/components/UserAccountNav"
 
@@ -21,7 +22,7 @@ const Navbar = async() => {
           </p>
         </Link>
 
-        {/* Search Bar */}
+        <SearchBar />
 
         {session?.user ? (
           <UserAccountNav
