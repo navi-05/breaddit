@@ -4,15 +4,6 @@ import { NextResponse } from "next/server"
 import { db } from "@/lib/db"
 import { getAuthSession } from "@/lib/auth"
 
-
-export const CommentValidator = z.object({
-  postId: z.string(),
-  text: z.string(),
-  replyToId: z.string().optional()
-})
-
-export type CommentRequest = z.infer<typeof CommentValidator>
-
 export async function PATCH(
   req: Request
 ) {
@@ -21,8 +12,7 @@ export async function PATCH(
     const session = await getAuthSession()
     if(!session?.user) return new NextResponse("Unauthorized", { status: 401 })
 
-    const body = await req.json()
-    const { postId, text, replyToId } = CommentValidator.parse(body)
+    const { postId, text, replyToId } = await req.json()
 
     if(!postId) return new NextResponse("Post Id is missing", { status: 400 })
     if(!text) return new NextResponse("Text is missing", { status: 400 })
