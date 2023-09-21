@@ -1,4 +1,4 @@
-import { Comment, Post, Subreddit, User, Vote } from "@prisma/client"
+import { Comment, CommentVote, Post, Subreddit, User, Vote } from "@prisma/client"
 
 export type ExtendedPost = Post & {
   subreddit: Subreddit,
@@ -8,3 +8,8 @@ export type ExtendedPost = Post & {
 }
 
 export type PartialVote = Pick<Vote, "type">
+
+export type ExtendedComment = Comment & {
+  commentVotes: CommentVote[]
+  author: User
+}

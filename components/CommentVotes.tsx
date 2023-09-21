@@ -2,7 +2,7 @@
 import { VoteType } from "@prisma/client";
 import axios, { AxiosError } from "axios";
 import { usePrevious } from "@mantine/hooks";
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { ArrowBigDown, ArrowBigUp } from "lucide-react";
 
@@ -13,14 +13,14 @@ import { useCustomToast } from "@/hooks/use-custom-toast";
 
 import { Button } from "@/components/ui/button";
 
-interface PostVoteClientProps {
-  postId: string;
+interface CommentVotesProps {
+  commentId: string;
   initialVotesAmt: number;
-  initialVote?: VoteType | null;
+  initialVote?: VoteType | null
 }
 
-const PostVoteClient: FC<PostVoteClientProps> = ({
-  postId,
+const CommentVotes: FC<CommentVotesProps> = ({
+  commentId,
   initialVotesAmt,
   initialVote,
 }) => {
@@ -30,18 +30,15 @@ const PostVoteClient: FC<PostVoteClientProps> = ({
   const prevVote = usePrevious(currentVote);
   const { loginToast } = useCustomToast();
   
-  useEffect(() => {
-    setCurrentVote(initialVote);
-  }, [initialVote]);
 
   const { mutate: vote } = useMutation({
     mutationFn: async (voteType: VoteType) => {
       const payload = {
-        postId,
+        commentId,
         voteType,
       };
 
-      const { data } = await axios.patch(`/api/subreddit/post/vote`, payload);
+      const { data } = await axios.patch(`/api/subreddit/post/comment/vote`, payload);
       return data;
     },
     onError: (err, voteType) => {
@@ -74,7 +71,7 @@ const PostVoteClient: FC<PostVoteClientProps> = ({
   });
 
   return (
-    <div className="flex sm:flex-col gap-4 sm:gap-0 pr-6 sm:w-20 pb-4 sm:pb-0">
+    <div className="flex gap-1">
       <Button onClick={() => vote("UP")} size="sm" variant="ghost" aria-label="upvote">
         <ArrowBigUp
           className={cn(
@@ -98,4 +95,4 @@ const PostVoteClient: FC<PostVoteClientProps> = ({
   );
 };
 
-export default PostVoteClient;
+export default CommentVotes;
