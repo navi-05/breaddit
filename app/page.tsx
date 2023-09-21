@@ -7,6 +7,8 @@ import { buttonVariants } from "@/components/ui/button";
 import GeneralFeed from "@/components/GeneralFeed";
 import CustomFeed from "@/components/CustomFeed";
 
+export const dynamic = "force-dynamic"
+export const fetchCache = 'force-no-store'
 
 export default async function Home() {
 

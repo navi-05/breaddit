@@ -14,6 +14,7 @@ interface SidebarProps {
 }
 
 const Sidebar = async ({ subreddit, session }: SidebarProps) => {
+
   const memberCount = await db.subscription.count({
     where: {
       subreddit: {
@@ -63,7 +64,7 @@ const Sidebar = async ({ subreddit, session }: SidebarProps) => {
         )}
         {session?.user && (
           <Link 
-            href={`${subreddit.name}/submit`}
+            href={`/r/${subreddit.name}/submit`}
             className={buttonVariants({ variant: "outline", className: 'w-full mb-6' })}
           >
             Create Post
